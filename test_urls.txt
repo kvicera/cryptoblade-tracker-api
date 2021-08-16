@@ -1,0 +1,3 @@
+http://localhost:3000/api/getCharacters?address=0x03c08F176f4AC01EE89ff56196035f723DC723dC
+
+http://localhost:3000/api/getCharacterData?charId=1582086
