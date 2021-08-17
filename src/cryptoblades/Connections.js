@@ -10,8 +10,10 @@ const web3 = new Web3("https://bsc-dataseed1.defibit.io/")
 
 const conCryptoBlades = new web3.eth.Contract(CryptoBlades, Addresses.mainAddress)
 const conCharacters = new web3.eth.Contract(Characters, Addresses.charAddress)
+const conWeapons = new web3.eth.Contract(Weapons, Addresses.weapAddress);
 
 module.exports = {
   conCryptoBlades,
   conCharacters,
+  conWeapons
 }

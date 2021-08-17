@@ -2,10 +2,7 @@ const path = require("path")
 const express = require("express")
 const hbs = require("hbs")
 
-const Addresses = require("./cryptoblades/Addresses.js")
-const Connections = require("./cryptoblades/Connections.js")
-const Characters = require("./cryptoblades/Characters.js")
-const utils = require("./utils.js")
+const Common = require("./cryptoblades/Common.js")
 
 const app = express()
 
@@ -23,57 +20,14 @@ app.set("views", viewsPath)
 app.use(express.static(publicDirectoryPath))
 
 app.get("", (req, res) => {
-  res.render("index", {
-    title: "x",
-    name: "xx",
-  })
+	res.send("Hello there")
 })
 
-app.get("/api/getCharacters", (req, res) => {
-  try {
-    const address = req.query.address
+const charactersRouter = require('./routes/characters');
+const weaponsRouter = require('./routes/weapons');
 
-    if (utils.CheckAddress(address)) {
-      Connections.conCryptoBlades.methods
-        .getMyCharacters()
-        .call({ from: address })
-        .then(function (result) {
-          res.send(result)
-        })
-    } else {
-      res.send("Error: Invalid address passed in url parameter!")
-    }
-  } catch (err) {
-    res.send("Error!")
-  }
-})
-
-app.get("/api/getCharacterData", (req, res) => {
-  try {
-    const charId = req.query.charId
-
-    if (charId !== "") {
-      Connections.conCharacters.methods
-        .get(charId)
-        .call({ from: Addresses.defaultAddress })
-        .then(function (result) {
-          let charData = Characters.CharacterData(charId, result)
-
-          Connections.conCharacters.methods
-            .getStaminaPoints(charId)
-            .call({ from: Addresses.defaultAddress })
-            .then(function (result_stamina) {
-              charData["stamina"] = result_stamina
-              res.send(charData)
-            })
-        })
-    } else {
-      res.send("Error: Invalid address passed in url parameter!")
-    }
-  } catch (err) {
-    res.send("Error!")
-  }
-})
+app.use('/api/characters', charactersRouter)
+app.use('/api/weapons', weaponsRouter)
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is up on port 3000.")

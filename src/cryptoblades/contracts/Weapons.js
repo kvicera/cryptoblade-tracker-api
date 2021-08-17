@@ -1957,6 +1957,4 @@ const Weapons = [
   },
 ]
 
-module.exports = {
-  Weapons,
-}
+module.exports = Weapons
