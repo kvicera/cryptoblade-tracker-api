@@ -324,6 +324,7 @@
     "yallist": "^3.1.1"
   },
   "scripts": {
+	 "start": "node ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
