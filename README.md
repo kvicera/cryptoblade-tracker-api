@@ -27,7 +27,7 @@ http://localhost:3000/api/account/getBNBBalance?address=0x0000000000000000000000
 http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
 <br>
 <h5>/getRewardSkill</h5>
-http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
+http://localhost:3000/api/account/getRewardSkill?address=0x0000000000000000000000000000000000000000
 <br>
 <h5>/getSkillBalance</h5>
-http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
+http://localhost:3000/api/account/getSkillBalance?address=0x0000000000000000000000000000000000000000
