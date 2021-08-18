@@ -21,6 +21,13 @@ http://localhost:3000/api/character/getEnemies?charId=XXXXXXX&weapId=XXXXXXX
 http://localhost:3000/api/character/getUnclaimedCharacterExp?charId=1582086
 <br>
 <h5>getBNBBalance</h5>
-http://localhost:3000/api/account/getBNBBalance?address=0x03c08F176f4AC01EE89ff56196035f723DC723dC
+http://localhost:3000/api/account/getBNBBalance?address=0x0000000000000000000000000000000000000000
+<br>
 <h5>getStakedBal</h5>
-http://localhost:3000/api/account/getStakedBal?address=0x03c08F176f4AC01EE89ff56196035f723DC723dC
+http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
+<br>
+<h5>getRewardSkill</h5>
+http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
+<br>
+<h5>getSkillBalance</h5>
+http://localhost:3000/api/account/getStakedBal?address=0x0000000000000000000000000000000000000000
