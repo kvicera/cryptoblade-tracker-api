@@ -1,8 +1,8 @@
 const express = require('express')
 const Common = require('../cryptoblades/Common.js')
-const app = express.Router()
+const router = express.Router()
 
-app.get('/getCharacters', (req, res) => {
+router.get('/getCharacters', (req, res) => {
   try {
     const address = req.query.address
 
@@ -21,7 +21,7 @@ app.get('/getCharacters', (req, res) => {
   }
 })
 
-app.get('/getCharacterData', (req, res) => {
+router.get('/getCharacterData', (req, res) => {
   try {
     const charId = req.query.charId
 
@@ -48,7 +48,7 @@ app.get('/getCharacterData', (req, res) => {
   }
 })
 
-app.get('/getEnemies', (req, res) => {
+router.get('/getEnemies', (req, res) => {
   try {
     const charId = req.query.charId
     const weaponId = req.query.weapId
@@ -61,11 +61,30 @@ app.get('/getEnemies', (req, res) => {
           res.send(Common.Characters.getEnemyDetails(result))
         })
     } else {
-		res.send('Error: Invalid charId or weapId in url parameter!')
+      res.send('Error: Invalid charId or weapId in url parameter!')
     }
   } catch (err) {
     res.send('Error!')
   }
 })
 
-module.exports = app
+router.get('/getUnclaimedCharacterExp', (req, res) => {
+  try {
+    const charId = req.query.charId
+
+    if (charId !== '') {
+      Common.Connections.conCryptoBlades.methods
+        .getXpRewards(charId)
+        .call({ from: Common.Addresses.defaultAddress })
+        .then(function (result) {
+          res.send(result)
+        })
+    } else {
+      res.send('Error: Invalid charId in url parameter!')
+    }
+  } catch (err) {
+    res.send('Error!')
+  }
+})
+
+module.exports = router
