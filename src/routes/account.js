@@ -87,4 +87,53 @@ router.get('/getSkillBalance', (req, res) => {
   }
 })
 
+router.get('/getListedWeapons', (req, res) => {
+  try {
+    const address = req.query.address
+
+    if (Common.utils.CheckAddress(address)) {
+      request(
+        {
+          url:
+            'https://api.cryptoblades.io/static/market/weapon?element=&minStars=0&maxStars=0&sortBy=&sortDir=&minPrice=&maxPrice=&pageSize=60&sellerAddress=' +
+            address,
+        },
+        (error, response) => {
+          // Parse the response body from JSON string into JavaScript object
+          const data = JSON.parse(response.body)
+          res.send(data)
+        }
+      )
+    } else {
+      res.send('Error: Invalid address passed in url parameter!')
+    }
+  } catch (err) {
+    res.send('Error!' + err)
+  }
+})
+
+router.get('/getListedCharacters', (req, res) => {
+  try {
+    const address = req.query.address
+
+    if (Common.utils.CheckAddress(address)) {
+      request(
+        {
+          url:
+            'https://api.cryptoblades.io/static/market/character?element=&minStars=0&maxStars=0&sortBy=&sortDir=&minPrice=&maxPrice=&pageSize=60&sellerAddress=' +
+            address,
+        },
+        (error, response) => {
+          // Parse the response body from JSON string into JavaScript object
+          const data = JSON.parse(response.body)
+          res.send(data)
+        }
+      )
+    } else {
+      res.send('Error: Invalid address passed in url parameter!')
+    }
+  } catch (err) {
+    res.send('Error!' + err)
+  }
+})
 module.exports = router

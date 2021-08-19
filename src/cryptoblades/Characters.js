@@ -5,6 +5,14 @@ const WeaponElement = {
   Water: 3,
 }
 
+const WeaponTrait = {
+  STR: 0,
+  DEX: 1,
+  CHA: 2,
+  INT: 3,
+  PWR: 4,
+};
+
 function traitNumberToName(traitNum) {
   switch (traitNum) {
     case WeaponElement.Fire:
@@ -18,6 +26,42 @@ function traitNumberToName(traitNum) {
     default:
       return "???"
   }
+}
+
+function CharacterPower(level) {
+  return ((1000 + (level * 10)) * (Math.floor(level / 10) + 1));
+}
+
+function getElementAdvantage(playerElement, enemyElement) {
+  if ((playerElement + 1) % 4 === enemyElement) return 1;
+  if ((enemyElement + 1) % 4 === playerElement) return -1;
+  return 0;
+}
+
+function AdjustStatForTrait(statValue, statTrait, charTrait) {
+  let value = statValue;
+  if (statTrait === charTrait) { value = Math.floor(value * 1.07); } else if (statTrait === WeaponTrait.PWR) { value = Math.floor(value * 1.03); }
+  return value;
+}
+
+function MultiplierPerEffectiveStat(statValue) {
+  return statValue * 0.25;
+}
+
+function Stat1PercentForChar(wep, trait) {
+  return MultiplierPerEffectiveStat(AdjustStatForTrait(wep.stat1Value, wep.stat1Type, trait));
+}
+
+function Stat2PercentForChar(wep, trait) {
+  return MultiplierPerEffectiveStat(AdjustStatForTrait(wep.stat2Value, wep.stat2Type, trait));
+}
+
+function Stat3PercentForChar(wep, trait) {
+  return MultiplierPerEffectiveStat(AdjustStatForTrait(wep.stat3Value, wep.stat3Type, trait));
+}
+
+function GetTotalMultiplierForTrait(wep, trait) {
+  return 1 + (0.01 * (Stat1PercentForChar(wep, trait) + Stat2PercentForChar(wep, trait) + Stat3PercentForChar(wep, trait)));
 }
 
 const CharacterData = (id, data) => {
@@ -59,7 +103,39 @@ const getEnemyDetails = (targets) => {
 	})
 }
 
+function getAlignedCharacterPower(charData, weapData) {
+  const characterPower = CharacterPower(charData.level);
+  const playerElement = parseInt(charData.trait, 10);
+  const weaponMultiplier = GetTotalMultiplierForTrait(weapData, playerElement);
+  const totalPower = (characterPower * weaponMultiplier) + weapData.bonusPower;
+  return totalPower;
+}
+
+const getWinChance = (charData, weapData, enemyPower, enemyElement) => {
+  const playerElement = parseInt(charData.trait, 10);
+  const weaponElement = parseInt(WeaponElement[weapData.element], 10);
+  const totalPower = getAlignedCharacterPower(charData, weapData);
+  const totalMultiplier = 1 + (0.075 * (weaponElement === playerElement ? 1 : 0)) + (0.075 * getElementAdvantage(playerElement, enemyElement));
+  const playerMin = totalPower * totalMultiplier * 0.9;
+  const playerMax = totalPower * totalMultiplier * 1.1;
+  const enemyMin = enemyPower * 0.9;
+  const enemyMax = enemyPower * 1.1;
+  let win = 0;
+  let lose = 0;
+  for (let playerRoll = Math.floor(playerMin); playerRoll <= playerMax; playerRoll++) {
+    for (let enemyRoll = Math.floor(enemyMin); enemyRoll <= enemyMax; enemyRoll++) {
+      if (playerRoll >= enemyRoll) {
+        win++;
+      } else {
+        lose++;
+      }
+    }
+  }
+  return win / (win + lose);
+}
+
 module.exports = {
   CharacterData,
-  getEnemyDetails
+  getEnemyDetails,
+  getWinChance
 }
