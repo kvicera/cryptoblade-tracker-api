@@ -33,6 +33,7 @@ router.get('/getCharacterData', (req, res) => {
 
           getStamina(charId)
             .then((result) => {
+              charData['timeUntillFull'] = (200 - result) * 5
               charData['current_stamina'] = result
 
               getUnclaimedExp(charId)
